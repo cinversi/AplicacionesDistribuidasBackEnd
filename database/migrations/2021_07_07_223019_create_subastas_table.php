@@ -39,6 +39,7 @@ class CreateSubastasTable extends Migration
                 'oro', 
                 'platino'
                 ]);
+            $table->string('moneda')->nullable()->default('ARS');
             $table->unsignedBigInteger('subastador_id')->nullable();
             $table->foreign('subastador_id')->references('id')->on('subastadores');
             $table->timestamps();

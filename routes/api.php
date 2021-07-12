@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 //Persona
 Route::get('add-persona', 'App\Http\Controllers\PersonaController@addPersona');
+Route::get('get-persona', 'App\Http\Controllers\PersonaController@getPersona');
 
 //User
 Route::get('add-user', 'App\Http\Controllers\UserController@addUser');
+Route::get('login', 'App\Http\Controllers\UserController@login');
+Route::get('generate-password', 'App\Http\Controllers\UserController@generatePassword');
+
+//Login
+Route::get('get-currentuser', 'App\Http\Controllers\Auth\LoginController@getCurrentUser');
 
 //Cliente
 Route::get('add-cliente', 'App\Http\Controllers\ClienteController@addCliente');

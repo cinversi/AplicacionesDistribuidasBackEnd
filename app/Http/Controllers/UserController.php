@@ -93,11 +93,61 @@ class UserController extends Controller
                 'name' => $persona->nombre,
                 'email' => $request['email'],
                 'persona_id' => $persona->id,
-                'token' => rand(10000,90000)
+                'password' => rand(10000,90000)
             ]);
+            $user = User::where('email',$request->email)->first();
+            $user->token = $user->password;
+            $user->save();
             return $user;
         } else {
             // return response()->json(['error' => 'Forbidden'], 403);
         }
     }
+
+    public function generatePassword(Request $request)
+        {
+            $user = User::where('email',$request['email'])->first();
+            if($user)
+            {
+                $user->update(['password' => $request['password']]);
+                $user->save();
+            }
+            else
+            {
+                return ["error"=>"Email o password incorrecta"];
+            }
+            return $user;
+        }
+    
+    // public function login(Request $request){
+    //     $user = User::where('email',$request->email)->first();
+    //     if(!$user || $request->password!=$user->password)
+    //     {
+    //         return response()->json(['error' => 'Forbidden'],403);
+    //     }
+    //     else if ($user && $request->password==$user->password && $user->password==$user->token)
+    //     {
+    //         return response()->json('generatepassword');
+    //     }
+    //     else if ($user && $request->password==$user->password && $user->password!=$user->token)
+    //     {
+    //         $user = Auth::user();
+    //         return response()->json('login');
+    //     } 
+    // }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials, true)) {
+            // Authentireturcation passed...
+            return response()->json([
+                'success' => 'success',
+                200]);
+        } else {
+            return abort(403,'Login');
+        }
+    }
+
 }

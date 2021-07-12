@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Persona;
+use App\Models\User;
 
 class PersonaController extends Controller
 {
@@ -90,6 +91,14 @@ class PersonaController extends Controller
             'nombre' => $request['nombre'],    
             'direccion' => $request['direccion']
         ]);
+        return $persona;
+    }
+
+    public function getPersona(Request $request)
+    {
+        $user = User::where('email',$request['email'])->first();
+        $persona = Persona::where('id',$user->persona_id)->first();
+        //dd($persona);
         return $persona;
     }
 }

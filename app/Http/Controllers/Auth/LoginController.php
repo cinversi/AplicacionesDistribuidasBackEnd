@@ -4,9 +4,31 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use App\Modal\User;
 
 class LoginController extends Controller
 {
+    use AuthenticatesUsers;
+
+    protected $redirectTo = '/home';
+
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    public function getCurrentUser(){
+        $user = Auth::user();
+        return $user;
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Subasta;
 use App\Models\Cliente;
 use App\Models\Asistente;
+use App\Models\Catalogo;
+use App\Models\ItemsCatalogo;
+use App\Models\Foto;
+
 use DB;
 
 class SubastaController extends Controller
@@ -86,9 +90,34 @@ class SubastaController extends Controller
         //
     }
 
+    // public function getAllSubastas()
+    // {
+    //     return Subasta::all();
+    // }
+
     public function getAllSubastas()
     {
-        return Subasta::all();
+        $data = [];
+        $subastas = Subasta::with('catalogo')->get();
+        foreach ($subastas as $subasta){
+            $catalogo = $subasta->catalogo;
+            $itemsCatalogo = $catalogo->items;
+            foreach($itemsCatalogo as $item){
+                $item->producto->fotos;
+            }
+            $aux=[
+                'id' => $subasta->id,
+                'categoria' => $subasta->categoria,
+                'fecha'=>$subasta->fecha,
+                'horaInicio'=>$subasta->horaInicio,
+                'horaFin'=>$subasta->horaFin,
+                'moneda'=>$subasta->moneda,
+                'descripcion' => $catalogo->descripcion,
+                'items'=>$itemsCatalogo                
+            ];
+            array_push($data,$aux);
+        }
+        return $data;
     }
 
     public function getAllCategoriaSubastas($idUser)
