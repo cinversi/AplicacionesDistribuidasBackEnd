@@ -9,9 +9,4 @@ class Persona extends Model
 {
     protected $fillable = ['documento','nombre','direccion'];
     use HasFactory;
-
-    public function UserPersona()
-    {
-        return $this->hasOne('App\Models\User');
-    }
 }
