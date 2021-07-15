@@ -27,7 +27,7 @@ class CreateDueniosTable extends Migration
             $table->enum('calificacionRiesgo', [
                 1,2,3,4,5,6
                 ])->nullable()->default('1');
-            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('persona_id')->nullable()->unique();
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->unsignedBigInteger('verificador');
             $table->foreign('verificador')->references('id')->on('empleados');

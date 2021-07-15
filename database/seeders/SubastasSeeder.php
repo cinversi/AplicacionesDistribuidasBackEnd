@@ -65,7 +65,6 @@ class SubastasSeeder extends Seeder
         $duenio->verificaciónFinanciera = "si";
         $duenio->verificaciónJudicial = "si";
         $duenio->calificacionRiesgo = 1;
-        $duenio->persona_id = 1;
         $duenio->verificador = 1;
         $duenio->save();
 

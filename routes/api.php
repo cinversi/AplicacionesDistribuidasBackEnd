@@ -37,7 +37,7 @@ Route::get('cerrar-subasta/{id}', 'App\Http\Controllers\SubastaController@cerrar
 
 //Producto
 Route::get('get-productos/{idUser}', 'App\Http\Controllers\ProductoController@getProductos');
-Route::get('add-producto/{idUser}', 'App\Http\Controllers\ProductoController@addProducto');
+Route::get('add-producto', 'App\Http\Controllers\ProductoController@addProducto');
 Route::get('disponibilizar-producto/{id}', 'App\Http\Controllers\ProductoController@disponibilizarProducto');
 Route::get('rechazar-producto/{id}', 'App\Http\Controllers\ProductoController@rechazarProducto');
 
@@ -45,6 +45,7 @@ Route::get('rechazar-producto/{id}', 'App\Http\Controllers\ProductoController@re
 Route::get('get-catalogo/{id}', 'App\Http\Controllers\CatalogoController@getCatalogo');
 
 //ItemsCatalogo
+Route::get('get-preciobase-producto', 'App\Http\Controllers\ItemsCatalogoController@getPrecioBaseProducto');
 Route::get('get-items-catalogo/{id}', 'App\Http\Controllers\ItemsCatalogoController@getItemsCatalogo');
 
 //Asistente
@@ -56,12 +57,14 @@ Route::get('abandonar-subasta/{id}', 'App\Http\Controllers\AsistenteController@a
 Route::get('add-puja/{id}', 'App\Http\Controllers\PujoController@addPujo');
 
 //RegistroDeSubastas
+Route::get('get-ultima-puja', 'App\Http\Controllers\RegistroDeSubastaController@getUltimaPuja');
 Route::get('get-ganador-subasta/{id}', 'App\Http\Controllers\RegistroDeSubastaController@getGanadorSubasta');
 
 //MediosDePago
 Route::get('add-mediopago', 'App\Http\Controllers\MedioDePagoController@addMedioPago');
 Route::get('habilitar-mediopago/{id}', 'App\Http\Controllers\MedioDePagoController@habilitarMedioDePago');
 Route::get('rechazar-mediopago/{id}', 'App\Http\Controllers\MedioDePagoController@rechazarMedioDePago');
+Route::get('get-mediosdepago', 'App\Http\Controllers\MedioDePagoController@getMediosDePago');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

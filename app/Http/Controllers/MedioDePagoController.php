@@ -120,4 +120,10 @@ class MedioDePagoController extends Controller
         $MediosDePago->save();
         return $MediosDePago;
     }
+
+    public function getMediosDePago(Request $request)
+    {
+        $MediosDePago = MediosDePago::where('cliente_id',$request['cliente_id'])>get();
+        return $MediosDePago;
+    }
 }

@@ -83,6 +83,13 @@ class RegistroDeSubastaController extends Controller
         //
     }
 
+    public function getUltimaPuja(Request $request)
+    {
+        $fechamax = RegistroDeSubasta::max('created_at');
+        $registroSubasta = RegistroDeSubasta::where('created_at',$fechamax)->where('producto_id',$request['producto_id']);
+        return $registroSubasta;
+    }
+
     public function getGanadorSubasta($id)
     {
         //Cambiar el estado de la subasta
@@ -91,5 +98,5 @@ class RegistroDeSubastaController extends Controller
         //$registrosubasta = RegistroDeSubasta::where('subasta_id',$id)->get();
         $ganador = RegistroDeSubasta::where('subasta_id',$id)->where('importe',$importemaximo)->get('cliente_id');
         return $ganador;
-    }
+    }    
 }

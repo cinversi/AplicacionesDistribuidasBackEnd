@@ -82,10 +82,17 @@ class ItemsCatalogoController extends Controller
     {
         //
     }
-
+    
     public function getItemsCatalogo($idCatalogo)
     {
         $itemscatalogo = ItemsCatalogo::all()->where('catalogo_id',$idCatalogo); //TODO armar logueo
         return $itemscatalogo;
     }
+
+    public function getPrecioBaseProducto(Request $request)
+    {
+        $itemCatalogo = ItemsCatalogo::where('producto_id',$request['producto_id']);
+        return $itemCatalogo;
+    }
+
 }

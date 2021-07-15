@@ -125,7 +125,6 @@ class SubastaController extends Controller
     {
         $user = User::where('user_id',$request['user_id'])->first();
         $cliente = Cliente::where('persona_id',$user->persona_id)->first();
-
         $categorias = [
             'PLATINO'=>['COMUN','ESPECIAL','PLATA','ORO','PLATINO'],
             'ORO'=>['COMUN','ESPECIAL','PLATA','ORO'],

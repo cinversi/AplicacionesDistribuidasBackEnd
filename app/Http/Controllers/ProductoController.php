@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cliente;
+use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Producto;
 use App\Models\Duenio;
@@ -95,26 +95,48 @@ class ProductoController extends Controller
         return $productos;
     }
 
-    public function addProducto(Request $request, $idUser)
+    public function addProducto(Request $request)
     {
-        //$user = $this->checkLogIn($request['token']);
-        $cliente = Cliente::find($idUser); //TODO armar logueo
+        $user = User::where('user_id',$request['user_id'])->first();
         $empleado = Empleado::first();
-        if($cliente) {
+        $duenioCreado = Duenio::where('persona_id',$user->persona_id)->first();
+        if($duenioCreado==null){
+            if($user) {
+                $duenio = Duenio::create([   
+                    'persona_id' => $user->persona_id,
+                    'verificador' => $empleado->id        
+                ]);
+            } else {
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+            $duenio = Duenio::where('persona_id',$user->persona_id)->first();
+            if($duenio){
+                $producto = Producto::create([
+                    'fecha' => date('Y-m-d'),
+                    'descripcionCatalogo' => $request['descripcionCatalogo'],    
+                    'descripcionCompleta' => $request['descripcionCompleta'],    
+                    'cantidad' => $request['cantidad'],    
+                    'artista_obra' => $request['artista_obra'],  
+                    'fecha_obra' => $request['fecha_obra'],
+                    'historia_obra' => $request['historia_obra'],
+                    'revisor_id' => $empleado->id,
+                    'duenio_id' => $duenio->id        
+                ]);
+                return $producto;
+            }
+        }else{
             $producto = Producto::create([
                 'fecha' => date('Y-m-d'),
-                'descripcionCatalogo' => $request['descripcionCatalogo'],
+                'descripcionCatalogo' => $request['descripcionCatalogo'],    
                 'descripcionCompleta' => $request['descripcionCompleta'],    
+                'cantidad' => $request['cantidad'],    
+                'artista_obra' => $request['artista_obra'],  
+                'fecha_obra' => $request['fecha_obra'],
+                'historia_obra' => $request['historia_obra'],
                 'revisor_id' => $empleado->id,
-                'duenio_id' => $cliente->id        
-            ]);
-            $duenio = Duenio::create([   
-                'persona_id' => $cliente->id,
-                'verificador' => $empleado->id        
+                'duenio_id' => $duenioCreado->id        
             ]);
             return $producto;
-        } else {
-            return response()->json(['error' => 'Forbidden'], 403);
         }
     }
 

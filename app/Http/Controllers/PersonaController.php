@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\User;
+use App\Models\Empleado;
+use App\Models\Paise;
 
 class PersonaController extends Controller
 {
@@ -91,7 +93,31 @@ class PersonaController extends Controller
             'nombre' => $request['nombre'],    
             'direccion' => $request['direccion']
         ]);
-        return $persona;
+        if($persona) {
+            $user = User::create([
+                'name' => rand(1,100),
+                'email' => $request['email'],
+                'persona_id' => $persona->id,
+                'password' => Hash::make(rand(1,100)),
+                'user_id' => $request['user_id']
+            ]);
+        } else {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+        $persona = Persona::where('id',$persona->id)->first();
+        $empleado = Empleado::first();
+        $pais = Paise::first();
+        if($persona) {
+            $cliente = Cliente::create([
+                'persona_id' => $persona->id,
+                'empleado_id' => $empleado->id,
+                'numeroPais_id' => $pais->id,
+                'categoria' => $request['categoria']
+            ]);
+            return $cliente;
+        } else {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
     }
 
     public function getPersona(Request $request)
