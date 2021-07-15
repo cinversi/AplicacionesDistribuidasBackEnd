@@ -87,19 +87,18 @@ class ClienteController extends Controller
         //
     }
 
-    public function addCliente()
+    public function addCliente(Request $request)
     {
         $fechamax = Persona::max('created_at');
         $persona = Persona::where('created_at',$fechamax)->first();
-        $array = ['comun','especial','plata','oro','platino'];
         $empleado = Empleado::first();
         $pais = Paise::first();
         if($persona) {
             $cliente = Cliente::create([
-                'categoria' => Arr::random($array),
                 'persona_id' => $persona->id,
                 'empleado_id' => $empleado->id,
-                'numeroPais_id' => $pais->id
+                'numeroPais_id' => $pais->id,
+                'categoria' => $request['categoria']
             ]);
             return $cliente;
         } else {

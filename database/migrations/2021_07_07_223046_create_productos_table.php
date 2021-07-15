@@ -23,6 +23,10 @@ class CreateProductosTable extends Migration
                 ])->nullable()->default('no');
             $table->string('descripcionCatalogo')->nullable()->default('No Posee');
             $table->string('descripcionCompleta')->nullable();
+            $table->string('cantidad')->nullable();
+            $table->string('artista_obra')->nullable();
+            $table->string('fecha_obra')->nullable();
+            $table->string('historia_obra')->nullable();
             $table->unsignedBigInteger('revisor_id');
             $table->foreign('revisor_id')->references('id')->on('empleados');
             $table->unsignedBigInteger('duenio_id');

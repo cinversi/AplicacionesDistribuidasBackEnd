@@ -33,11 +33,11 @@ class CreateSubastasTable extends Migration
                 'no'
                 ]);
             $table->enum('categoria', [
-                'comun', 
-                'especial', 
-                'plata', 
-                'oro', 
-                'platino'
+                'COMUN', 
+                'ESPECIAL', 
+                'PLATA', 
+                'ORO', 
+                'PLATINO'
                 ]);
             $table->string('moneda')->nullable()->default('ARS');
             $table->unsignedBigInteger('subastador_id')->nullable();

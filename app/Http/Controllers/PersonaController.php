@@ -98,7 +98,6 @@ class PersonaController extends Controller
     {
         $user = User::where('email',$request['email'])->first();
         $persona = Persona::where('id',$user->persona_id)->first();
-        //dd($persona);
         return $persona;
     }
 }

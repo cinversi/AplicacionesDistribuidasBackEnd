@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    protected $fillable = ['fecha','descripcionCatalogo','descripcionCompleta','revisor_id','duenio_id'];
+    protected $fillable = ['fecha','descripcionCatalogo','descripcionCompleta','cantidad','artista_obra','fecha_obra','historia_obra','revisor_id','duenio_id'];
     use HasFactory;
     public function fotos()
     {

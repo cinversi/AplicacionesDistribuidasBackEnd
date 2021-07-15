@@ -32,7 +32,7 @@ Route::get('admitir-cliente/{id}', 'App\Http\Controllers\ClienteController@admit
 
 //Subasta
 Route::get('get-all-subastas', 'App\Http\Controllers\SubastaController@getAllSubastas');
-Route::get('get-all-categoria-subastas/{idUser}', 'App\Http\Controllers\SubastaController@getAllCategoriaSubastas');
+Route::get('get-all-categoria-subastas', 'App\Http\Controllers\SubastaController@getAllCategoriaSubastas');
 Route::get('cerrar-subasta/{id}', 'App\Http\Controllers\SubastaController@cerrarSubasta');
 
 //Producto
@@ -59,7 +59,7 @@ Route::get('add-puja/{id}', 'App\Http\Controllers\PujoController@addPujo');
 Route::get('get-ganador-subasta/{id}', 'App\Http\Controllers\RegistroDeSubastaController@getGanadorSubasta');
 
 //MediosDePago
-Route::get('add-mediopago/{id}', 'App\Http\Controllers\MedioDePagoController@addMedioPago');
+Route::get('add-mediopago', 'App\Http\Controllers\MedioDePagoController@addMedioPago');
 Route::get('habilitar-mediopago/{id}', 'App\Http\Controllers\MedioDePagoController@habilitarMedioDePago');
 Route::get('rechazar-mediopago/{id}', 'App\Http\Controllers\MedioDePagoController@rechazarMedioDePago');
 

@@ -20,7 +20,6 @@ class CreateMediosDePagosTable extends Migration
                 'no',
                 'rechazado'
                 ])->nullable()->default('no');
-            $table->string('cuentabancaria');
             $table->string('numero');
             $table->string('expiracion');
             $table->string('cvc');

@@ -18,15 +18,9 @@ class CreateClientesTable extends Migration
             $table->enum('admitido', [
                 'si',
                 'no'
-                ])->nullable()->default('no');
-            $table->enum('categoria', [
-                'comun', 
-                'especial', 
-                'plata', 
-                'oro', 
-                'platino'
-                ]);
-            $table->unsignedBigInteger('persona_id');
+                ])->nullable()->default('si');
+            $table->string('categoria');
+            $table->unsignedBigInteger('persona_id')->nullable()->unique();
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->unsignedBigInteger('empleado_id');
             $table->foreign('empleado_id')->references('id')->on('empleados');

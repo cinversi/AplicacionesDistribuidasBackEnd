@@ -37,7 +37,7 @@ class SubastasSeeder extends Seeder
         $pais->save();
 
         $persona = new Persona();
-        $persona->documento = "38392048";
+        $persona->documento = rand(1,100);
         $persona->nombre = "Tomas";
         $persona->direccion = "Mitre 323";
         $persona->foto = "acaHayUnaFoto";
@@ -55,8 +55,7 @@ class SubastasSeeder extends Seeder
         $sectore->save();
 
         $cliente = new Cliente();
-        $cliente->categoria = "oro";
-        $cliente->persona_id = 1;
+        $cliente->categoria = "ORO";
         $cliente->empleado_id = 1;
         $cliente->numeroPais_id = 1;
         $cliente->save();
@@ -94,6 +93,10 @@ class SubastasSeeder extends Seeder
         $producto->disponible = "si";
         $producto->descripcionCatalogo = "esto es una descripcion";
         $producto->descripcionCompleta = "esto es una descripcion";
+        $producto->cantidad = "cantidad";
+        $producto->artista_obra = "artista_obra";
+        $producto->fecha_obra = "25/06/1956";
+        $producto->historia_obra = "historia_obra";
         $producto->revisor_id = 1;
         $producto->duenio_id = 1;
         $producto->save();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Subasta;
+use App\Models\User;
 use App\Models\Cliente;
 use App\Models\Asistente;
 use App\Models\Catalogo;
@@ -113,24 +114,46 @@ class SubastaController extends Controller
                 'horaFin'=>$subasta->horaFin,
                 'moneda'=>$subasta->moneda,
                 'descripcion' => $catalogo->descripcion,
-                'items'=>$itemsCatalogo                
+                'items'=>$itemsCatalogo   
             ];
             array_push($data,$aux);
         }
         return $data;
     }
 
-    public function getAllCategoriaSubastas($idUser)
+    public function getAllCategoriaSubastas(Request $request)
     {
-        $user = Cliente::find($idUser); //TODO armar logueo
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+
         $categorias = [
-            'platino'=>['comun','especial','plata','oro','platino'],
-            'oro'=>['comun','especial','plata','oro'],
-            'plata'=>['comun','especial','plata'],
-            'especial'=>['comun','especial'],
-            'comun'=>['comun']
+            'PLATINO'=>['COMUN','ESPECIAL','PLATA','ORO','PLATINO'],
+            'ORO'=>['COMUN','ESPECIAL','PLATA','ORO'],
+            'PLATA'=>['COMUN','ESPECIAL','PLATA'],
+            'ESPECIAL'=>['COMUN','ESPECIAL'],
+            'COMUN'=>['COMUN']
         ];
-        return Subasta::whereIn('categoria',$categorias[$user->categoria])->get();
+        $data = [];
+        $subastas = Subasta::whereIn('categoria',$categorias[$cliente->categoria])->get();
+        foreach ($subastas as $subasta){
+            $catalogo = $subasta->catalogo;
+            $itemsCatalogo = $catalogo->items;
+            foreach($itemsCatalogo as $item){
+                $item->producto->fotos;
+            }
+            $aux=[
+                'id' => $subasta->id,
+                'categoria' => $subasta->categoria,
+                'fecha'=>$subasta->fecha,
+                'horaInicio'=>$subasta->horaInicio,
+                'horaFin'=>$subasta->horaFin,
+                'moneda'=>$subasta->moneda,
+                'descripcion' => $catalogo->descripcion,
+                'items'=>$itemsCatalogo   
+            ];
+            array_push($data,$aux);
+        }
+        return $data;
     }
 
     public function cerrarSubasta($id)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -90,34 +91,54 @@ class UserController extends Controller
         $persona = Persona::where('created_at',$fechamax)->first();
         if($persona) {
             $user = User::create([
-                'name' => $persona->nombre,
+                'name' => rand(1,100),
                 'email' => $request['email'],
                 'persona_id' => $persona->id,
-                'password' => rand(10000,90000)
+                'password' => Hash::make(rand(1,100)),
+                'user_id' => $request['user_id']
             ]);
-            $user = User::where('email',$request->email)->first();
-            $user->token = $user->password;
-            $user->save();
             return $user;
         } else {
             // return response()->json(['error' => 'Forbidden'], 403);
         }
     }
 
-    public function generatePassword(Request $request)
-        {
-            $user = User::where('email',$request['email'])->first();
-            if($user)
-            {
-                $user->update(['password' => $request['password']]);
-                $user->save();
-            }
-            else
-            {
-                return ["error"=>"Email o password incorrecta"];
-            }
-            return $user;
-        }
+
+    
+    // public function addUser(Request $request)
+    // {
+    //     $fechamax = Persona::max('created_at');
+    //     $persona = Persona::where('created_at',$fechamax)->first();
+    //     if($persona) {
+    //         $user = User::create([
+    //             'name' => $persona->nombre,
+    //             'email' => $request['email'],
+    //             'persona_id' => $persona->id,
+    //             'password' => $request['password'],
+    //             'user_id' => $request['user_id']
+    //         ]);
+    //         $user = User::where('email',$request->email)->first();
+    //         $user->token = $user->password;
+    //         $user->save();
+    //         return $user;
+    //     } else {
+    //         // return response()->json(['error' => 'Forbidden'], 403);
+    //     }
+    // }
+    // public function generatePassword(Request $request)
+    //     {
+    //         $user = User::where('email',$request['email'])->first();
+    //         if($user)
+    //         {
+    //             $user->update(['password' => $request['password']]);
+    //             $user->save();
+    //         }
+    //         else
+    //         {
+    //             return ["error"=>"Email o password incorrecta"];
+    //         }
+    //         return $user;
+    //     }
     
     // public function login(Request $request){
     //     $user = User::where('email',$request->email)->first();
@@ -136,18 +157,17 @@ class UserController extends Controller
     //     } 
     // }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials, true)) {
-            // Authentireturcation passed...
-            return response()->json([
-                'success' => 'success',
-                200]);
-        } else {
-            return abort(403,'Login');
-        }
-    }
-
+    //     if (Auth::attempt($credentials, true)) {
+    //         // Authentireturcation passed...
+    //         return response()->json([
+    //             'success' => 'success',
+    //             200]);
+    //     } else {
+    //         return abort(403,'Login');
+    //     }
+    // }
 }

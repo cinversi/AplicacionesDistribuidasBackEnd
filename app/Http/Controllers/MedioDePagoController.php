@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MediosDePago;
 use App\Models\Cliente;
+use App\Models\User;
 
 class MedioDePagoController extends Controller
 {
@@ -84,13 +85,12 @@ class MedioDePagoController extends Controller
         //
     }
 
-    public function addMedioPago(Request $request, $idUser)
+    public function addMedioPago(Request $request)
     {
-        //$user = $this->checkLogIn($request['token']);
-        $cliente = Cliente::find($idUser); //TODO armar logueo
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
         if($cliente) {
             $mediopago = MediosDePago::create([
-                'cuentabancaria' => $request['cuentabancaria'],
                 'numero' => $request['numero'],
                 'expiracion' => $request['expiracion'],    
                 'cvc' => $request['cvc'],
