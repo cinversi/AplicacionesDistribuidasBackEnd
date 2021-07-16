@@ -7,6 +7,7 @@ use App\Models\Persona;
 use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Paise;
+use App\Models\Cliente;
 
 class PersonaController extends Controller
 {

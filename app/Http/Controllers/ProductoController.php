@@ -87,12 +87,34 @@ class ProductoController extends Controller
         //
     }
 
-    public function getProductos($idUser)
+    public function getAllProductos()
     {
-        $persona = User::find($idUser); //TODO armar logueo
-        $duenio = Duenio::find($persona -> id); //TODO armar logueo
-        $productos = Producto::where('duenio_id',$duenio -> id)->get(); //TODO armar logueo
-        return $productos;
+        $producto = Producto::all();
+        return $producto;
+    }
+
+    public function getProductos(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $duenio = Duenio::where('persona_id',$user->persona_id)->first();
+        $productos = Producto::where('duenio_id',$duenio -> id)->get(); 
+        $data = [];
+        foreach ($productos as $producto){
+            $aux=[
+                'id' => $producto->id,
+                'artista_obra' => $producto->artista_obra,
+                'cantidad'=>$producto->cantidad,
+                'descripcionCatalogo'=>$producto->descripcionCatalogo,
+                'descripcionCompleta'=>$producto->descripcionCompleta,
+                'duenio_id'=>$producto->duenio_id,
+                'fecha' => $producto->fecha,
+                'fecha_obra'=>$producto->fecha_obra,
+                'historia_obra'=>$producto->historia_obra,
+                'disponible'=>$producto->disponible
+            ];
+            array_push($data,$aux);
+        }
+        return $data;
     }
 
     public function addProducto(Request $request)

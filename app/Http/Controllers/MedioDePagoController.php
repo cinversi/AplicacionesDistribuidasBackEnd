@@ -123,7 +123,7 @@ class MedioDePagoController extends Controller
 
     public function getMediosDePago(Request $request)
     {
-        $MediosDePago = MediosDePago::where('cliente_id',$request['cliente_id'])>get();
+        $MediosDePago = MediosDePago::where('cliente_id',$request['cliente_id'])->get();
         return $MediosDePago;
     }
 }

@@ -86,7 +86,7 @@ class RegistroDeSubastaController extends Controller
     public function getUltimaPuja(Request $request)
     {
         $fechamax = RegistroDeSubasta::max('created_at');
-        $registroSubasta = RegistroDeSubasta::where('created_at',$fechamax)->where('producto_id',$request['producto_id']);
+        $registroSubasta=RegistroDeSubasta::where(['created_at'=>$fechamax, 'producto_id'=>$request['producto_id']])->first();
         return $registroSubasta;
     }
 

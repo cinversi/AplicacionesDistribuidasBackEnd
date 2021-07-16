@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\Persona;
 use App\Models\Empleado;
 use App\Models\Paise;
+use App\Models\User;
 
 class ClienteController extends Controller
 {
@@ -112,5 +113,12 @@ class ClienteController extends Controller
         $cliente->admitido = 'si';
         $cliente->save();
         return "ok";
+    }
+
+    public function getCliente(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        return $cliente;
     }
 }

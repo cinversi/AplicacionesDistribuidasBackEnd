@@ -91,7 +91,7 @@ class ItemsCatalogoController extends Controller
 
     public function getPrecioBaseProducto(Request $request)
     {
-        $itemCatalogo = ItemsCatalogo::where('producto_id',$request['producto_id']);
+        $itemCatalogo = ItemsCatalogo::where('producto_id',$request['producto_id'])->first();
         return $itemCatalogo;
     }
 

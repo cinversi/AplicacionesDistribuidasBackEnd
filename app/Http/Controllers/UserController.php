@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -103,7 +104,12 @@ class UserController extends Controller
         }
     }
 
-
+    public function getUserByPersona(Request $request)
+    {
+        $cliente = Cliente::where('id',$request['cliente_id'])->first();
+        $user = User::where('persona_id',$cliente->persona_id)->first();
+        return $user;
+    }
     
     // public function addUser(Request $request)
     // {

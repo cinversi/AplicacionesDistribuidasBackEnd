@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Foto;
+use App\Models\User;
+use App\Models\Producto;
+use App\Models\Duenio;
 
 class FotoController extends Controller
 {
@@ -80,5 +84,24 @@ class FotoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addFoto(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $duenio = Duenio::where('persona_id',$user->persona_id)->first();
+        if($duenio) {
+            $fechamax = Producto::max('created_at');
+            $producto = Producto::where('duenio_id',$duenio->id)->where('created_at',$fechamax)->first();
+            if($producto) {
+                $foto = Foto::create([
+                    'foto' => $request['foto'],
+                    'producto_id' => $producto->id
+                ]);
+                return $foto;
+            }
+        } else {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
     }
 }

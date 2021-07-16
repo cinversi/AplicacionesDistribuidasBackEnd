@@ -22,6 +22,7 @@ Route::get('get-persona', 'App\Http\Controllers\PersonaController@getPersona');
 Route::get('add-user', 'App\Http\Controllers\UserController@addUser');
 Route::get('login', 'App\Http\Controllers\UserController@login');
 Route::get('generate-password', 'App\Http\Controllers\UserController@generatePassword');
+Route::get('get-user-bypersona', 'App\Http\Controllers\UserController@getUserByPersona');
 
 //Login
 Route::get('get-currentuser', 'App\Http\Controllers\Auth\LoginController@getCurrentUser');
@@ -29,6 +30,7 @@ Route::get('get-currentuser', 'App\Http\Controllers\Auth\LoginController@getCurr
 //Cliente
 Route::get('add-cliente', 'App\Http\Controllers\ClienteController@addCliente');
 Route::get('admitir-cliente/{id}', 'App\Http\Controllers\ClienteController@admitirCliente');
+Route::get('get-cliente', 'App\Http\Controllers\ClienteController@getCliente');
 
 //Subasta
 Route::get('get-all-subastas', 'App\Http\Controllers\SubastaController@getAllSubastas');
@@ -36,10 +38,13 @@ Route::get('get-all-categoria-subastas', 'App\Http\Controllers\SubastaController
 Route::get('cerrar-subasta/{id}', 'App\Http\Controllers\SubastaController@cerrarSubasta');
 
 //Producto
-Route::get('get-productos/{idUser}', 'App\Http\Controllers\ProductoController@getProductos');
+Route::get('get-productos', 'App\Http\Controllers\ProductoController@getProductos');
 Route::get('add-producto', 'App\Http\Controllers\ProductoController@addProducto');
 Route::get('disponibilizar-producto/{id}', 'App\Http\Controllers\ProductoController@disponibilizarProducto');
 Route::get('rechazar-producto/{id}', 'App\Http\Controllers\ProductoController@rechazarProducto');
+
+//Foto
+Route::get('add-foto', 'App\Http\Controllers\FotoController@addFoto');
 
 //Catalogo
 Route::get('get-catalogo/{id}', 'App\Http\Controllers\CatalogoController@getCatalogo');
