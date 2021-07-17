@@ -106,4 +106,12 @@ class ItemsCatalogoController extends Controller
         ]);
         return $items;
     }
+
+    public function itemSubastado(Request $request)
+    {
+        $item = ItemsCatalogo::find($request['id']);
+        $item->subastado = 'si';
+        $item->save();
+        return;
+    }
 }

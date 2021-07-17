@@ -56,6 +56,7 @@ Route::get('get-catalogo/{id}', 'App\Http\Controllers\CatalogoController@getCata
 Route::get('get-itemscatalogo-producto', 'App\Http\Controllers\ItemsCatalogoController@getItemsCatalogoProducto');
 Route::get('get-items-catalogo/{id}', 'App\Http\Controllers\ItemsCatalogoController@getItemsCatalogo');
 Route::get('add-items-catalogo', 'App\Http\Controllers\ItemsCatalogoController@addItemsCatalogo');
+Route::get('item-subastado', 'App\Http\Controllers\ItemsCatalogoController@itemSubastado');
 
 //Asistente
 
