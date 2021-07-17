@@ -130,18 +130,4 @@ class AsistenteController extends Controller
             return "EnOtraSubasta";
         }
     }
-
-    public function abandonarSubasta(Request $request)
-    {
-        $user = User::where('user_id',$request['user_id'])->first();
-        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
-        if($cliente) {
-            $asistente = Asistente::where('cliente_id',$cliente->id)->where('subasta_id',$request['subasta_id'])->first();
-            if($asistente){
-                $asistente->participando = 0;
-                $asistente->save();
-            }
-        }
-        return null;
-    }
 }

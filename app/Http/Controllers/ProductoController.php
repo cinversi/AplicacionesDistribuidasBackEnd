@@ -163,17 +163,17 @@ class ProductoController extends Controller
         }
     }
 
-    public function disponibilizarProducto($id)
+    public function aceptarProducto(Request $request)
     {
-        $producto = Producto::find($id);
+        $producto = Producto::find($request['id']);
         $producto->disponible = 'si';
         $producto->save();
         return $producto;
     }
 
-    public function rechazarProducto($id)
+    public function rechazarProducto(Request $request)
     {
-        $producto = Producto::find($id);
+        $producto = Producto::find($request['id']);
         $producto->disponible = 'rechazado';
         $producto->save();
         return $producto;

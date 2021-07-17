@@ -101,7 +101,7 @@ class SubastaController extends Controller
     public function getAllSubastas()
     {
         $data = [];
-        $subastas = Subasta::with('catalogo')->get();
+        $subastas = Subasta::where('estado','abierta')->get();
         foreach ($subastas as $subasta){
             $catalogo = $subasta->catalogo;
             $itemsCatalogo = $catalogo->items;
@@ -135,7 +135,7 @@ class SubastaController extends Controller
             'COMUN'=>['COMUN']
         ];
         $data = [];
-        $subastas = Subasta::whereIn('categoria',$categorias[$cliente->categoria])->get();
+        $subastas = Subasta::where('estado','abierta')->whereIn('categoria',$categorias[$cliente->categoria])->get();
         foreach ($subastas as $subasta){
             $catalogo = $subasta->catalogo;
             $itemsCatalogo = $catalogo->items;
@@ -161,6 +161,7 @@ class SubastaController extends Controller
     {
         $subastador = Subastadore::first();
         $empleado = Empleado::first();
+        $item_catalogo = ItemsCatalogo::where('id',$request['item_id'])->first();
         $subasta = Subasta::create([
             'ubicacion' => $request['ubicacion'],
             'fecha' => $request['fecha'],    
@@ -175,8 +176,12 @@ class SubastaController extends Controller
         ]);
         $catalogo = Catalogo::create([
             'subasta_id' => $subasta->id,
-            'responsable_id' => $empleado->id 
+            'responsable_id' => $empleado->id,
+            'descripcion' => $request['descripcion']
         ]);
+        $item_catalogo->catalogo_id = $catalogo->id;
+        $item_catalogo->producto_id = $request['producto_id'];
+        $item_catalogo->save();
         return $subasta;
     }
 
@@ -190,5 +195,19 @@ class SubastaController extends Controller
         //Cambiar el estado de los clientes
         DB::table('Asistentes')->where('subasta_id',$subasta->id)->update(['participando' => 0]);
         return;
+    }
+
+    public function abandonarSubasta(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        if($cliente) {
+            $asistente = Asistente::where('cliente_id',$cliente->id)->where('subasta_id',$request['subasta_id'])->first();
+            if($asistente){
+                $asistente->participando = 0;
+                $asistente->save();
+            }
+        }
+        return null;
     }
 }

@@ -37,12 +37,14 @@ Route::get('get-all-subastas', 'App\Http\Controllers\SubastaController@getAllSub
 Route::get('get-all-categoria-subastas', 'App\Http\Controllers\SubastaController@getAllCategoriaSubastas');
 Route::get('add-subasta', 'App\Http\Controllers\SubastaController@addSubasta');
 Route::get('cerrar-subasta', 'App\Http\Controllers\SubastaController@cerrarSubasta');
+Route::get('abandonar-subasta', 'App\Http\Controllers\SubastaController@abandonarSubasta');
+
 
 //Producto
 Route::get('get-productos', 'App\Http\Controllers\ProductoController@getProductos');
 Route::get('add-producto', 'App\Http\Controllers\ProductoController@addProducto');
-Route::get('disponibilizar-producto/{id}', 'App\Http\Controllers\ProductoController@disponibilizarProducto');
-Route::get('rechazar-producto/{id}', 'App\Http\Controllers\ProductoController@rechazarProducto');
+Route::get('aceptar-producto', 'App\Http\Controllers\ProductoController@aceptarProducto');
+Route::get('rechazar-producto', 'App\Http\Controllers\ProductoController@rechazarProducto');
 
 //Foto
 Route::get('add-foto', 'App\Http\Controllers\FotoController@addFoto');
@@ -58,7 +60,6 @@ Route::get('add-items-catalogo', 'App\Http\Controllers\ItemsCatalogoController@a
 //Asistente
 
 Route::get('add-asistente', 'App\Http\Controllers\AsistenteController@addAsistente');
-Route::get('abandonar-subasta', 'App\Http\Controllers\AsistenteController@abandonarSubasta');
 
 //Pujo
 Route::get('add-puja', 'App\Http\Controllers\PujoController@addPujo');
