@@ -7,6 +7,8 @@ use App\Models\Cliente;
 use App\Models\Pujo;
 use App\Models\ItemsCatalogo;
 use App\Models\Producto;
+use App\Models\User;
+use App\Models\Asistente;
 
 class PujoController extends Controller
 {
@@ -86,27 +88,29 @@ class PujoController extends Controller
         //
     }
 
-    public function addPuja(Request $request,$idUser,$idAsistente,$idSubasta,$idItem)
+    public function addPuja(Request $request)
     {
-        $cliente = Cliente::find($idUser); //TODO armar logueo
-        $item = ItemsCatalogo::find($idItem); //TODO pasar iditem
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $item = ItemsCatalogo::where('id',$request['item_id'])->first();
         $producto = Producto::find($item->producto_id);
-        //$user = $this->checkLogIn($request['token']); //TODO armar logueo
+        $asistente = Asistente::where(['id'=>$request['asistente_id'],'subasta_id'=>$request['subasta_id']])->first();
         if($cliente) {
             $pujo = Pujo::create([
-                'asistente_id' => $idAsistente,
-                'item_id' => $idItem
+                'asistente_id' => $asistente->id,
+                'item_id' => $item->id
             ]);
             $registrosubasta = RegistroDeSubasta::create([
-                'importe' => $request['importe'], //TODO agregar importe
-                'comision' => $request['comision'], //TODO agregar comision
-                'subasta_id' => $idSubasta,
+                'importe' => $request['importe'], 
+                'comision' => $request['comision'], 
+                'subasta_id' => $request['subasta_id'],
                 'duenio_id' => $producto->duenio_id,
                 'producto_id' => $item->producto_id,
                 'cliente_id' => $cliente->id,
             ]);
         } else {
-            // return response()->json(['error' => 'Forbidden'], 403);
+            return response()->json(['error' => 'Forbidden'], 403);
         }
     }
+
 }

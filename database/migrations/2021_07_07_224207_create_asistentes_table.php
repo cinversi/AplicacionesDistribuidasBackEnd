@@ -16,6 +16,7 @@ class CreateAsistentesTable extends Migration
         Schema::create('asistentes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('numeroPostor');
+            $table->string('participando')->nullable()->default(0);
             $table->unsignedBigInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->unsignedBigInteger('subasta_id');

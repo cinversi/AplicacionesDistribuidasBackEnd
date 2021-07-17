@@ -110,7 +110,8 @@ class ProductoController extends Controller
                 'fecha' => $producto->fecha,
                 'fecha_obra'=>$producto->fecha_obra,
                 'historia_obra'=>$producto->historia_obra,
-                'disponible'=>$producto->disponible
+                'disponible'=>$producto->disponible,
+                'fotos'=>$producto->fotos
             ];
             array_push($data,$aux);
         }

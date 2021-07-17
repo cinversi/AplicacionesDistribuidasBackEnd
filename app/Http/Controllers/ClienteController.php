@@ -121,4 +121,5 @@ class ClienteController extends Controller
         $cliente = Cliente::where('persona_id',$user->persona_id)->first();
         return $cliente;
     }
+
 }

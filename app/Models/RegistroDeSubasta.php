@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class RegistroDeSubasta extends Model
 {
+    protected $fillable = ['importe','comision','subasta_id','duenio_id','producto_id','cliente_id'];
     use HasFactory;
 }

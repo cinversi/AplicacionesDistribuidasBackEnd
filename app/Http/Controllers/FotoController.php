@@ -7,6 +7,7 @@ use App\Models\Foto;
 use App\Models\User;
 use App\Models\Producto;
 use App\Models\Duenio;
+use Illuminate\Support\Str;
 
 class FotoController extends Controller
 {
@@ -88,6 +89,8 @@ class FotoController extends Controller
 
     public function addFoto(Request $request)
     {
+        $f = Str::replaceArray('%26', ['&'], $request['foto']);
+        $fo = Str::replaceArray('subastas/', ['subastas%2F'], $f);
         $user = User::where('user_id',$request['user_id'])->first();
         $duenio = Duenio::where('persona_id',$user->persona_id)->first();
         if($duenio) {
@@ -95,7 +98,7 @@ class FotoController extends Controller
             $producto = Producto::where('duenio_id',$duenio->id)->where('created_at',$fechamax)->first();
             if($producto) {
                 $foto = Foto::create([
-                    'foto' => $request['foto'],
+                    'foto' => $fo,
                     'producto_id' => $producto->id
                 ]);
                 return $foto;

@@ -22,7 +22,7 @@ class CreateSubastasTable extends Migration
             $table->enum('estado', [
                 'abierta',
                 'cerrada'
-                ]);
+                ])->nullable()->default('cerrada');;
             $table->integer('capacidadAsistentes');
             $table->enum('tieneDeposito', [
                 'si',

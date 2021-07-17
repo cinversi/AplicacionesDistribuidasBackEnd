@@ -10,6 +10,8 @@ use App\Models\Asistente;
 use App\Models\Catalogo;
 use App\Models\ItemsCatalogo;
 use App\Models\Foto;
+use App\Models\Subastadore;
+use App\Models\Empleado;
 
 use DB;
 
@@ -155,16 +157,38 @@ class SubastaController extends Controller
         return $data;
     }
 
-    public function cerrarSubasta($id)
+    public function addSubasta(Request $request)
+    {
+        $subastador = Subastadore::first();
+        $empleado = Empleado::first();
+        $subasta = Subasta::create([
+            'ubicacion' => $request['ubicacion'],
+            'fecha' => $request['fecha'],    
+            'horaInicio' => $request['horaInicio'],    
+            'horaFin' => $request['horaFin'],    
+            'estado' => $request['estado'],  
+            'capacidadAsistentes' => $request['capacidadAsistentes'],
+            'tieneDeposito' => $request['tieneDeposito'],
+            'seguridadPropia' => $request['seguridadPropia'],
+            'categoria' => $request['categoria'],
+            'subastador_id' => $subastador->id        
+        ]);
+        $catalogo = Catalogo::create([
+            'subasta_id' => $subasta->id,
+            'responsable_id' => $empleado->id 
+        ]);
+        return $subasta;
+    }
+
+    public function cerrarSubasta(Request $request)
     {
         //Cambiar el estado de la subasta
-        $subasta = Subasta::find($id);
+        $subasta = Subasta::find($request['id']);
         $subasta->estado = 'cerrada';
         $subasta->save();
 
         //Cambiar el estado de los clientes
-        DB::table('Asistentes')->where('subasta_id',$subasta->id)->update(['numeroPostor' => 0]);
+        DB::table('Asistentes')->where('subasta_id',$subasta->id)->update(['participando' => 0]);
         return;
     }
-
 }

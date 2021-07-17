@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RegistroDeSubasta;
+use App\Models\User;
+use App\Models\Cliente;
+use App\Models\Persona;
 
 class RegistroDeSubastaController extends Controller
 {
@@ -85,9 +88,21 @@ class RegistroDeSubastaController extends Controller
 
     public function getUltimaPuja(Request $request)
     {
-        $fechamax = RegistroDeSubasta::max('created_at');
+        $fechamax = RegistroDeSubasta::where('producto_id',$request['producto_id'])->max('created_at');
         $registroSubasta=RegistroDeSubasta::where(['created_at'=>$fechamax, 'producto_id'=>$request['producto_id']])->first();
-        return $registroSubasta;
+        if($registroSubasta) 
+        {
+            $cliente = Cliente::where('id',$registroSubasta->cliente_id)->first();
+            $user = User::where('persona_id',$cliente->persona_id)->first();
+            $persona = Persona::where('id',$user->persona_id)->first();
+            $data = [
+                'created_at' => $registroSubasta->created_at,
+                'importe' => $registroSubasta->importe,
+                'user_id' => $user->user_id,
+                'nombre' => $persona->nombre];
+            return $data;
+        }
+        return;
     }
 
     public function getGanadorSubasta($id)

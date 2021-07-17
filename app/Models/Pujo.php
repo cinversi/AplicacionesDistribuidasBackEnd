@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pujo extends Model
 {
-    protected $fillable = ['importe','comision','subasta_id','duenio_id','producto_id','cliente_id'];
+    protected $fillable = ['asistente_id','item_id'];
     use HasFactory;
 }

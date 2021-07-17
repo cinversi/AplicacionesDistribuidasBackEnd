@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Subasta;
+use App\Models\User;
+use App\Models\Asistente;
+use App\Models\Pujo;
+use App\Models\ItemsCatalogo;
+use App\Models\Producto;
+use App\Models\RegistroDeSubasta;
 
 class AsistenteController extends Controller
 {
@@ -84,33 +90,58 @@ class AsistenteController extends Controller
         //
     }
 
-    public function addAsistente($idUser,$idSubasta)
+    public function addAsistente(Request $request)       
     {
-        $cliente = Cliente::find($idUser);
-        //$user = $this->checkLogIn($request['token']); //TODO armar logueo
-        if($cliente) {
-            $asistente = Asistente::create([
-                'numeroPostor' => rand(1,100),   
-                'cliente_id' => $cliente->id,
-                'subasta_id' => $idSubasta  
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $subasta_id = $request['subasta_id'];
+        $asistenteCreado = Asistente::where('cliente_id',$cliente->id)->where('subasta_id',$subasta_id)->first();
+        $asistenteGeneral = Asistente::where('cliente_id',$cliente->id)->where('participando','!=',0)->where('subasta_id','!=',$subasta_id)->first();
+        $item = ItemsCatalogo::where('id',$request['item_id'])->first();
+        $producto = Producto::find($item->producto_id);
+        if($cliente){
+            if($asistenteCreado==null && $asistenteGeneral==null) {
+                $asistente = Asistente::create([
+                    'numeroPostor' => rand(1,100),   
+                    'cliente_id' => $cliente->id,
+                    'subasta_id' => $subasta_id,
+                    'participando' =>  $subasta_id 
+                ]);
+            }else{
+                $asistente = $asistenteCreado;
+            }
+        }else {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+        if($asistente && $asistenteGeneral==null) {
+            $pujo = Pujo::create([
+                'asistente_id' => $asistente->id,
+                'item_id' => $item->id
             ]);
-            return $asistente;
+            $registrosubasta = RegistroDeSubasta::create([
+                'importe' => $request['importe'], 
+                'comision' => $request['comision'], 
+                'subasta_id' => $request['subasta_id'],
+                'duenio_id' => $producto->duenio_id,
+                'producto_id' => $item->producto_id,
+                'cliente_id' => $cliente->id,
+            ]);
         } else {
-            // return response()->json(['error' => 'Forbidden'], 403);
+            return "EnOtraSubasta";
         }
     }
 
-    public function abandonarSubasta($idUser,$idSubasta)
+    public function abandonarSubasta(Request $request)
     {
-        $cliente = Cliente::find($idUser);
-        //$user = $this->checkLogIn($request['token']); //TODO armar logueo
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
         if($cliente) {
-            $asistente = Asistente::where('cliente_id',$cliente->id)->where('subasta_id',$idSubasta);
-            $asistente->numeroPostor = 0;
-            $asistente->save();
-            return $asistente;
-        } else {
-            // return response()->json(['error' => 'Forbidden'], 403);
+            $asistente = Asistente::where('cliente_id',$cliente->id)->where('subasta_id',$request['subasta_id'])->first();
+            if($asistente){
+                $asistente->participando = 0;
+                $asistente->save();
+            }
         }
+        return null;
     }
 }

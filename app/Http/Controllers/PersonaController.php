@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Paise;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Hash;
 
 class PersonaController extends Controller
 {
@@ -94,6 +95,7 @@ class PersonaController extends Controller
             'nombre' => $request['nombre'],    
             'direccion' => $request['direccion']
         ]);
+        //$persona = Persona::where('id',$persona->id)->first();
         if($persona) {
             $user = User::create([
                 'name' => rand(1,100),
@@ -105,7 +107,6 @@ class PersonaController extends Controller
         } else {
             return response()->json(['error' => 'Forbidden'], 403);
         }
-        $persona = Persona::where('id',$persona->id)->first();
         $empleado = Empleado::first();
         $pais = Paise::first();
         if($persona) {
@@ -119,12 +120,5 @@ class PersonaController extends Controller
         } else {
             return response()->json(['error' => 'Forbidden'], 403);
         }
-    }
-
-    public function getPersona(Request $request)
-    {
-        $user = User::where('email',$request['email'])->first();
-        $persona = Persona::where('id',$user->persona_id)->first();
-        return $persona;
     }
 }

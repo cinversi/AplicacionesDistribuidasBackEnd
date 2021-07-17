@@ -35,7 +35,8 @@ Route::get('get-cliente', 'App\Http\Controllers\ClienteController@getCliente');
 //Subasta
 Route::get('get-all-subastas', 'App\Http\Controllers\SubastaController@getAllSubastas');
 Route::get('get-all-categoria-subastas', 'App\Http\Controllers\SubastaController@getAllCategoriaSubastas');
-Route::get('cerrar-subasta/{id}', 'App\Http\Controllers\SubastaController@cerrarSubasta');
+Route::get('add-subasta', 'App\Http\Controllers\SubastaController@addSubasta');
+Route::get('cerrar-subasta', 'App\Http\Controllers\SubastaController@cerrarSubasta');
 
 //Producto
 Route::get('get-productos', 'App\Http\Controllers\ProductoController@getProductos');
@@ -50,16 +51,17 @@ Route::get('add-foto', 'App\Http\Controllers\FotoController@addFoto');
 Route::get('get-catalogo/{id}', 'App\Http\Controllers\CatalogoController@getCatalogo');
 
 //ItemsCatalogo
-Route::get('get-preciobase-producto', 'App\Http\Controllers\ItemsCatalogoController@getPrecioBaseProducto');
+Route::get('get-itemscatalogo-producto', 'App\Http\Controllers\ItemsCatalogoController@getItemsCatalogoProducto');
 Route::get('get-items-catalogo/{id}', 'App\Http\Controllers\ItemsCatalogoController@getItemsCatalogo');
+Route::get('add-items-catalogo', 'App\Http\Controllers\ItemsCatalogoController@addItemsCatalogo');
 
 //Asistente
 
-//Route::get('add-asistente/{id}', 'App\Http\Controllers\AsistenteController@addAsistente');
-Route::get('abandonar-subasta/{id}', 'App\Http\Controllers\AsistenteController@abandonarSubasta');
+Route::get('add-asistente', 'App\Http\Controllers\AsistenteController@addAsistente');
+Route::get('abandonar-subasta', 'App\Http\Controllers\AsistenteController@abandonarSubasta');
 
 //Pujo
-Route::get('add-puja/{id}', 'App\Http\Controllers\PujoController@addPujo');
+Route::get('add-puja', 'App\Http\Controllers\PujoController@addPujo');
 
 //RegistroDeSubastas
 Route::get('get-ultima-puja', 'App\Http\Controllers\RegistroDeSubastaController@getUltimaPuja');

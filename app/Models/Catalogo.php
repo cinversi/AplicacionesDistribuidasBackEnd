@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Catalogo extends Model
 {
+    protected $fillable = ['descripcion','responsable_id','subasta_id'];
     use HasFactory;
     public function items()
     {

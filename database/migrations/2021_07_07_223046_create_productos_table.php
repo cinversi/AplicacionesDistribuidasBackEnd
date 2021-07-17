@@ -19,6 +19,7 @@ class CreateProductosTable extends Migration
             $table->enum('disponible', [
                 'si',
                 'no',
+                'aprobado',
                 'rechazado'
                 ])->nullable()->default('no');
             $table->string('descripcionCatalogo')->nullable()->default('No Posee');

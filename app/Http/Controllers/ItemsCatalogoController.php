@@ -89,10 +89,21 @@ class ItemsCatalogoController extends Controller
         return $itemscatalogo;
     }
 
-    public function getPrecioBaseProducto(Request $request)
+    public function getItemsCatalogoProducto(Request $request)
     {
         $itemCatalogo = ItemsCatalogo::where('producto_id',$request['producto_id'])->first();
         return $itemCatalogo;
     }
 
+    public function addItemsCatalogo(Request $request)
+    {
+        $items = ItemsCatalogo::create([
+            'precioBase' => $request['precioBase'],    
+            'comision' => $request['comision'],
+            'subastado' => $request['subastado'],    
+            'catalogo_id' => $request['catalogo_id'],
+            'producto_id' => $request['producto_id']        
+        ]);
+        return $items;
+    }
 }
