@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ItemsCatalogo;
+use App\Models\Producto;
 
 class ItemsCatalogoController extends Controller
 {
@@ -104,6 +105,9 @@ class ItemsCatalogoController extends Controller
             'catalogo_id' => $request['catalogo_id'],
             'producto_id' => $request['producto_id']        
         ]);
+        $producto = Producto::find($request['producto_id']);
+        $producto->disponible = 'aprobado';
+        $producto->save();
         return $items;
     }
 

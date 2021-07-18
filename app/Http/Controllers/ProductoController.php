@@ -163,6 +163,18 @@ class ProductoController extends Controller
         }
     }
 
+    public function getEspectadorEsDuenio(Request $request)
+    {
+        $producto= Producto::find($request['producto_id']);
+        $duenio=Duenio::find($producto->duenio_id);
+        $user=User::where('user_id',$request['user_id'])->first();
+        if($user->persona_id!=$duenio->persona_id){
+            return "false";
+        }else{
+            return "true";
+        }
+    }
+
     public function aceptarProducto(Request $request)
     {
         $producto = Producto::find($request['id']);

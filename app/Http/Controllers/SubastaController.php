@@ -12,6 +12,8 @@ use App\Models\ItemsCatalogo;
 use App\Models\Foto;
 use App\Models\Subastadore;
 use App\Models\Empleado;
+use App\Models\Producto;
+use App\Models\RegistroDeSubasta;
 
 use DB;
 
@@ -161,7 +163,7 @@ class SubastaController extends Controller
     {
         $subastador = Subastadore::first();
         $empleado = Empleado::first();
-        $item_catalogo = ItemsCatalogo::where('id',$request['item_id'])->first();
+        $item_catalogo = ItemsCatalogo::where('producto_id',$request['producto_id'])->first();
         $subasta = Subasta::create([
             'ubicacion' => $request['ubicacion'],
             'fecha' => $request['fecha'],    
@@ -180,7 +182,6 @@ class SubastaController extends Controller
             'descripcion' => $request['descripcion']
         ]);
         $item_catalogo->catalogo_id = $catalogo->id;
-        $item_catalogo->producto_id = $request['producto_id'];
         $item_catalogo->save();
         return $subasta;
     }
@@ -209,5 +210,78 @@ class SubastaController extends Controller
             }
         }
         return null;
+    }
+
+
+    public function getSubastaProducto(Request $request)
+    {
+        $producto = Producto::where('id',$request['id'])->first();
+        $items = ItemsCatalogo::where('producto_id',$producto->id)->first();
+        $catalogo = Catalogo::where('id',[$items->catalogo_id])->first();
+        if($producto->disponible == 'si') {
+            $subasta = Subasta::where('id',$catalogo->subasta_id)->first();
+            return $subasta;
+        }
+        return null;
+    }
+
+    public function getGanadorSubasta(Request $request)
+    {
+        $user = User::where('user_id',$request['id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $ultimaSubasta = Subasta::whereExists(function ($query) use ($cliente){
+                                        $query->select(DB::raw(1))
+                                        ->from('registro_de_subastas AS rs')
+                                        ->whereRaw('rs.subasta_id = subastas.id')
+                                        ->where('rs.cliente_id',$cliente->id);
+                                    })->orderBy('fecha','desc')->orderBy('horaFin','desc')->first();
+        if($ultimaSubasta->estado=="cerrada"){
+            $maximport = RegistroDeSubastas::where('subasta_id',$ultimaSubasta->id)->orderBy('importe','desc')->first();
+                    if ($maximport->cliente_id==$cliente->id){
+                        $data = [
+                            'descripcion' => $ultimaSubasta->catalogo->descripcion,
+                            'estado' => 'Ganaste'];
+                        return $data;
+                    }
+                    else{
+                        $data = [
+                            'descripcion' => $ultimaSubasta->catalogo->descripcion,
+                            'estado' => 'No Ganaste'];
+                        return $data;
+                    }
+        }else{
+            $data = [
+                'descripcion' => $ultimaSubasta->catalogo->descripcion,
+                'estado' => 'Participando'];
+            return $data;
+        }
+    }
+
+    public function getSubastaDeCliente(Request $request)
+    {
+        $user = User::where('user_id',$request['id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $subastaParticipo = Subasta::whereExists(function ($query) use ($cliente){
+                                        $query->select(DB::raw(1))
+                                        ->from('registro_de_subastas AS rs')
+                                        ->whereRaw('rs.subasta_id = subastas.id')
+                                        ->where('rs.cliente_id',$cliente->id);
+                                    })->get();
+        $cantidadparticipaciones =count($subastaParticipo);
+        $pujasganadas = RegistroDeSubasta::where('cliente_id',$cliente->id)->
+                            whereNotExists(function ($query) use ($cliente){
+                                $query->select(DB::raw(1))
+                                ->from('registro_de_subastas AS rs')
+                                ->whereRaw('rs.subasta_id = registro_de_subastas.subasta_id')
+                                ->where('rs.importe','>',(DB::raw('registro_de_subastas.importe')));
+                            })->get();
+        $subastasganadas = Subasta::whereIn('id',$pujasganadas->pluck('subasta_id'))->get();
+        $cantidadsubastasganadas = count($subastasganadas);
+        $importegastado = $pujasganadas->sum('importe');
+        $data = [
+            'cantidadparticipaciones' => $cantidadparticipaciones,
+            'cantidadsubastasganadas' => $cantidadsubastasganadas,
+            'importegastado' => $importegastado];
+        return $data;
     }
 }

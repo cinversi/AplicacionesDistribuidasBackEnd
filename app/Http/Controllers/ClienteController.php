@@ -122,4 +122,15 @@ class ClienteController extends Controller
         return $cliente;
     }
 
+    public function actualizarCategoriaCliente(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $arrayCategoria = ['comun','especial','plata','oro','platino'];
+        $random = Arr::random($arrayCategoria);
+        if($cliente){
+            
+        }
+        return $cliente;
+    }
 }

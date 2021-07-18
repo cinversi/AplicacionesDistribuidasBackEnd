@@ -89,7 +89,20 @@ class MedioDePagoController extends Controller
     {
         $user = User::where('user_id',$request['user_id'])->first();
         $cliente = Cliente::where('persona_id',$user->persona_id)->first();
-        if($cliente) {
+        $existemedio = MediosDePago::where('cliente_id',$cliente->id)->first();
+        if($cliente && $existemedio==null) {
+            $mediopago = MediosDePago::create([
+                'numero' => $request['numero'],
+                'expiracion' => $request['expiracion'],    
+                'cvc' => $request['cvc'],
+                'nombre' => $request['nombre'],
+                'codigoPostal' => $request['codigoPostal'],
+                'tipo' => $request['tipo'],
+                'default' => 1,
+                'cliente_id' => $cliente->id
+            ]);
+            return $mediopago;
+        } elseif($cliente && $existemedio==null) {
             $mediopago = MediosDePago::create([
                 'numero' => $request['numero'],
                 'expiracion' => $request['expiracion'],    
@@ -100,30 +113,68 @@ class MedioDePagoController extends Controller
                 'cliente_id' => $cliente->id
             ]);
             return $mediopago;
-        } else {
-            return response()->json(['error' => 'Forbidden'], 403);
         }
-    }
-
-    public function habilitarMedioDePago($id)
-    {
-        $MediosDePago = MediosDePago::find($id);
-        $MediosDePago->verificado = 'si';
-        $MediosDePago->save();
-        return $MediosDePago;
-    }
-
-    public function rechazarMedioDePago($id)
-    {
-        $MediosDePago = MediosDePago::find($id);
-        $MediosDePago->verificado = 'rechazado';
-        $MediosDePago->save();
-        return $MediosDePago;
     }
 
     public function getMediosDePago(Request $request)
     {
-        $MediosDePago = MediosDePago::where('cliente_id',$request['cliente_id'])->get();
-        return $MediosDePago;
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        if($cliente){
+            $MediosDePago = MediosDePago::where('cliente_id',$cliente->id)->where('verificado','si')->get();
+            return $MediosDePago;
+        }
+    }
+
+    public function habilitarMedioDePago(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        if($cliente){
+            $MediosDePago = MediosDePago::where('cliente_id',$cliente->id)->where('id',$request['mp_id'])->first();
+            $MediosDePago->verificado = 'si';
+            $MediosDePago->save();
+            return $MediosDePago;
+        }
+    }
+
+    public function rechazarMedioDePago(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        if($cliente){
+            $MediosDePago = MediosDePago::where('cliente_id',$cliente->id)->where('id',$request['mp_id'])->first();
+            $MediosDePago->verificado = 'rechazado';
+            $MediosDePago->save();
+            return $MediosDePago;
+        }
+    }
+
+    public function defaultMedioDePago(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $existemedio = MediosDePago::where('cliente_id',$cliente->id)->where('default',1)->first();
+        if($cliente){
+            $MediosDePago = MediosDePago::where('cliente_id',$cliente->id)->where('id',$request['mp_id'])->first();
+            $MediosDePago->default = 1;
+            $MediosDePago->save();
+            $existemedio->default = 0;
+            $existemedio->save();
+            return $MediosDePago;
+        }
+    }
+
+    public function eliminarMedioDePago(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+        $existemedio = MediosDePago::where('cliente_id',$cliente->id)->get();
+        if($cliente && count($existemedio)>1){
+            $MediosDePago = MediosDePago::where('cliente_id',$cliente->id)->where('id',$request['mp_id'])->first();
+            $MediosDePago->verificado = 'eliminado';
+            $MediosDePago->save();
+            return $MediosDePago;
+        }
     }
 }

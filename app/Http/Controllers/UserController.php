@@ -103,4 +103,14 @@ class UserController extends Controller
             // return response()->json(['error' => 'Forbidden'], 403);
         }
     }
+
+    public function changeEmail(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        if($user){
+            $user->email = $request['email'];
+            $user->save();
+            return $user;
+        }
+    }
 }

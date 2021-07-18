@@ -121,4 +121,29 @@ class PersonaController extends Controller
             return response()->json(['error' => 'Forbidden'], 403);
         }
     }
+
+    public function getPersona(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        if($user){
+            $persona = Persona::where('id',$user->persona_id)->first();
+            $cliente = Cliente::where('persona_id',$user->persona_id)->first();
+            $data = [
+                'nombre' => $persona->nombre,
+                'email' => $user->email,
+                'categoria' => $cliente->categoria];
+            return $data;
+        }
+    }
+
+    public function updateDatosPersona(Request $request)
+    {
+        $user = User::where('user_id',$request['user_id'])->first();
+        $persona = Persona::where('id',$user->persona_id)->first();
+        if($persona){
+            $persona->direccion = $request['direccion'];
+            $persona->save();
+            return $persona;
+        }
+    }
 }
