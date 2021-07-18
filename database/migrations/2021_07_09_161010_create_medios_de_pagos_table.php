@@ -18,7 +18,8 @@ class CreateMediosDePagosTable extends Migration
             $table->enum('verificado', [
                 'si',
                 'no',
-                'rechazado'
+                'rechazado',
+                'eliminado'
                 ])->nullable()->default('no');
             $table->string('numero');
             $table->string('expiracion');
@@ -26,6 +27,7 @@ class CreateMediosDePagosTable extends Migration
             $table->string('nombre');
             $table->string('codigoPostal');
             $table->string('tipo');
+            $table->string('default')->nullable()->default(0);
             $table->unsignedBigInteger('cliente_id')->nullable();
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->timestamps();

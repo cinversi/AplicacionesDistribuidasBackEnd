@@ -27,11 +27,11 @@ class CreateSubastasTable extends Migration
             $table->enum('tieneDeposito', [
                 'si',
                 'no'
-                ]);
+                ])->nullable()->default('no');;
             $table->enum('seguridadPropia', [
                 'si',
                 'no'
-                ]);
+                ])->nullable()->default('no');;
             $table->enum('categoria', [
                 'COMUN', 
                 'ESPECIAL', 

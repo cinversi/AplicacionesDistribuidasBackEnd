@@ -20,7 +20,8 @@ class CreateProductosTable extends Migration
                 'si',
                 'no',
                 'aprobado',
-                'rechazado'
+                'rechazado',
+                'subastado'
                 ])->nullable()->default('no');
             $table->string('descripcionCatalogo')->nullable()->default('No Posee');
             $table->string('descripcionCompleta')->nullable();

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MediosDePago extends Model
 {
-    protected $fillable = ['verificado','numero','expiracion','cvc','nombre','codigoPostal','tipo','cliente_id'];
+    protected $fillable = ['verificado','numero','expiracion','cvc','nombre','codigoPostal','tipo','default','cliente_id'];
     use HasFactory;
 }

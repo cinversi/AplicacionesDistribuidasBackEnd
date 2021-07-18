@@ -20,7 +20,7 @@ class CreateItemsCatalogosTable extends Migration
             $table->enum('subastado', [
                 'si',
                 'no'
-                ]);
+                ])->nullable()->default('no');
             $table->unsignedBigInteger('catalogo_id');
             $table->foreign('catalogo_id')->references('id')->on('catalogos');
             $table->unsignedBigInteger('producto_id');
